@@ -3,6 +3,9 @@
     ".sequelizerc": "javascript",
     ".stylelintrc": "json",
     ".prettierrc": "json",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "wiringpi.h": "c",
+    "termios.h": "c",
+    "uart.h": "c"
   }
 }

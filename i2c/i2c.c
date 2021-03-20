@@ -50,7 +50,7 @@ int fd;  // seen by all subroutines
 // float to string
 void typeFloat(float myFloat)   {
   char buffer[20];
-  sprintf(buffer, "%.2f",  myFloat);
+  sprintf(buffer, "%.1f",  myFloat);
   typeln(buffer);
 }
 

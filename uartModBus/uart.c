@@ -1,4 +1,3 @@
-#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -35,14 +34,6 @@ void clearData()
 void initializeUart()
 {
   uart0_filestream = open("/dev/serial0", O_RDWR | O_NOCTTY | O_NDELAY); //Open in non blocking read/write mode
-  if (uart0_filestream == -1)
-  {
-    printf("Error could not initialize UART.\n");
-  }
-  else
-  {
-    printf("UART successfully initialized!\n");
-  }
   struct termios options;
   tcgetattr(uart0_filestream, &options);
   options.c_cflag = B9600 | CS8 | CLOCAL | CREAD;
@@ -58,28 +49,12 @@ void initializeUart()
 void uartWriting(int packageLenght)
 {
   int writeFlag = write(uart0_filestream, &tx_buffer[0], packageLenght);
-  if (writeFlag < 0)
-  {
-    printf("UART TX error\n");
-  }
-  else
-  {
-    printf("Successful write operation\n");
-  }
 }
 
 void uartReading()
 {
-  sleep(1.2);
+  usleep(200000);
   int rx_length = read(uart0_filestream, (void *)rx_buffer, 255);
-  if (rx_length < 0)
-  {
-    printf("Erro na leitura.\n");
-  }
-  else if (rx_length == 0)
-  {
-    printf("Nenhum dado disponível.\n");
-  }
 }
 
 void calculateCRC(int packageLenght)
@@ -95,7 +70,6 @@ void readingPotentiometer()
   *p_tx_buffer++ = UART_ADDRESS;
   *p_tx_buffer++ = RECEIVE_CODE;
   *p_tx_buffer++ = RECEIVE_POTENTIOMETER_CODE;
-
   *p_tx_buffer++ = 0x01;
   *p_tx_buffer++ = 0x02;
   *p_tx_buffer++ = 0x02;
