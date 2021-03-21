@@ -28,10 +28,11 @@ void poweroff()
 void waitFunction()
 {
   alarm(1);
-  if(escrita == 2) {
+  if (escrita == 2)
+  {
     escrita = 0;
   }
-  escrita ++;
+  escrita++;
 }
 
 void userInsertStop()
@@ -59,7 +60,6 @@ int main(int argc, char const *argv[])
   initializeUart();
   pid_configura_constantes(5.0, 1.0, 5.0);
   initialize = bme280Init(1, 0x76);
-  printf("referencia antes: %f\n", referenceTemperature);
   signal(SIGINT, poweroff);
   signal(SIGALRM, waitFunction);
   alarm(1);
@@ -95,16 +95,22 @@ int main(int argc, char const *argv[])
       ventoinha = controle * -1;
       resistor = 0;
     }
+    else
+    {
+      disableCooler();
+      disableResistor();
+    }
     printf("\n|-----------------------------------------------------------|\n");
     printf("|                                                           |\n");
     printf("|     Text = %.2f ºC, Tint. = %.2f ºC  Tref = %.2f ºC    |\n", (float)Temperature / 100, lm35, referenceTemperature);
-    printf("|       Uso Ventoinha: %.2f %% Uso Resistor: %.2f %%        |\n", ventoinha, resistor);
+    printf("|       Uso Ventoinha: %.2f %% Uso Resistor: %.2f %%         |\n", ventoinha, resistor);
     printf("|  digite: ctrl + z para alterar modo de temperatura        |\n");
     if (flagStop == 0)
     {
       printf("|                  modo Potenciometro                       |\n");
     }
-    else {
+    else
+    {
       printf("|                     modo Usuario                          |\n");
     }
     printf("|            digite: ctrl + c para encerrar                 |\n");
