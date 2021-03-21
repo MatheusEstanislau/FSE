@@ -9,15 +9,18 @@
 #include "file/writeCsv.h"
 #include <signal.h>
 
-int ventoinha;
-int resistor;
-
+float ventoinha;
+float resistor;
+int flagStop = 0;
+float referenceTemperature = 0;
+float user;
 void poweroff()
 {
+  printf("\nDesligando Sistema\n");
   disableCooler();
   disableResistor();
   ClrLcd();
-  printf("\nDesligando Sistema\n");
+  printf("...Sistema Desligado\n");
   exit(0);
 }
 
@@ -26,25 +29,50 @@ void waitFunction()
   alarm(1);
 }
 
+void userInsertStop()
+{
+  if (flagStop == 0)
+  {
+    flagStop = 1;
+    printf("\nInsira a temperatura desejada: \n");
+    scanf("%f", &user);
+  }
+  else
+  {
+    printf("\nIniciando modo com Potenciometro\n");
+    flagStop = 0;
+  }
+}
+
 int main(int argc, char const *argv[])
 {
+  int initialize;
+  float potentiometer, lm35;
+  int Temperature, Pressure, Humidity;
   wiringPiSetup();
   initWrite();
   initializeUart();
   pid_configura_constantes(5.0, 1.0, 5.0);
-  int initialize;
-  float potentiometer, lm35;
-  int Temperature, Pressure, Humidity;
   initialize = bme280Init(1, 0x76);
+  printf("referencia antes: %f\n", referenceTemperature);
   signal(SIGINT, poweroff);
   signal(SIGALRM, waitFunction);
   alarm(1);
   while (1)
   {
+    signal(SIGTSTP, userInsertStop);
     potentiometer = getPotentiometerData();
+    if (flagStop == 0)
+    {
+      referenceTemperature = potentiometer;
+    }
+    else
+    {
+      referenceTemperature = user;
+    }
     lm35 = getLM35Data();
     bme280ReadValues(&Temperature, &Pressure, &Humidity);
-    pid_atualiza_referencia(potentiometer);
+    pid_atualiza_referencia(referenceTemperature);
 
     double controle = pid_controle(lm35);
 
@@ -59,17 +87,25 @@ int main(int argc, char const *argv[])
     {
       activateCooler((controle * -1));
       disableResistor();
-      ventoinha = controle*-1;
+      ventoinha = controle * -1;
       resistor = 0;
     }
-    printf("\n|---------------------------------------------------|\n");
-    printf("|                                                   |\n");
-    printf("| Text = %.2f ºC, Tint. = %.2f%%  Tref = %.2f     |\n", (float)Temperature / 100, lm35, potentiometer);
-    printf("| Uso Ventoinha: %.2d %% Uso Resistor: %.2d %%           |\n", ventoinha, resistor);
-    printf("|                                                   |\n");
-    printf("|---------------------------------------------------|\n");
-    writeInLcd(potentiometer, lm35, (float)Temperature / 100);
-    writeInCsv((float)Temperature / 100, (float)lm35, (float)potentiometer);
+    printf("\n|-------------------------------------------------------|\n");
+    printf("|                                                       |\n");
+    printf("|     Text = %.2f ºC, Tint. = %.2f%%  Tref = %.2f     |\n", (float)Temperature / 100, lm35, referenceTemperature);
+    printf("|       Uso Ventoinha: %.2f %% Uso Resistor: %.2f %%     |\n", ventoinha, resistor);
+    printf("|  digite: ctrl + z para alterar modo de temperatura    |\n");
+    if (flagStop == 0)
+    {
+      printf("|                  modo Potenciometro                   |\n");
+    }
+    else {
+      printf("|                     modo Usuario                      |\n");
+    }
+    printf("|-------------------------------------------------------|\n");
+    printf("|            digite: ctrl + c para encerrar             |\n");
+    writeInLcd(referenceTemperature, lm35, (float)Temperature / 100);
+    writeInCsv((float)Temperature / 100, (float)lm35, (float)referenceTemperature, ventoinha, resistor);
     pause();
   }
   return 0;
