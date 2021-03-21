@@ -1,7 +1,5 @@
 output.o: i2c/i2c.o i2c/i2c.o bme280/bme280.o uartModBus/uart.o uartModBus/crc.o pwm/wiringPi.o pid/pid.o file/writeCsv.o
 	gcc uartModBus/crc.o bme280/bme280.o uartModBus/uart.o i2c/i2c.o pwm/wiringPi.o pid/pid.o file/writeCsv.o main.c -o output -lwiringPi -lpthread
-	./output
-
 file.o: file/writeCsv.c
 	gcc file/writeCsv.c -o file/writeCsv.o
 
