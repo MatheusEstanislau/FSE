@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    ".sequelizerc": "javascript",
+    ".stylelintrc": "json",
+    ".prettierrc": "json",
+    "iostream": "cpp",
+    "wiringpi.h": "c",
+    "termios.h": "c",
+    "uart.h": "c"
+  }
+}
