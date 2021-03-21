@@ -14,6 +14,7 @@ float resistor;
 int flagStop = 0;
 float referenceTemperature = 0;
 float user;
+int escrita = 0;
 void poweroff()
 {
   printf("\nDesligando Sistema\n");
@@ -27,6 +28,10 @@ void poweroff()
 void waitFunction()
 {
   alarm(1);
+  if(escrita == 2) {
+    escrita = 0;
+  }
+  escrita ++;
 }
 
 void userInsertStop()
@@ -105,7 +110,10 @@ int main(int argc, char const *argv[])
     printf("|            digite: ctrl + c para encerrar                 |\n");
     printf("|-----------------------------------------------------------|\n");
     writeInLcd(referenceTemperature, lm35, (float)Temperature / 100);
-    writeInCsv((float)Temperature / 100, (float)lm35, (float)referenceTemperature, ventoinha, resistor);
+    if (escrita == 2)
+    {
+      writeInCsv((float)Temperature / 100, (float)lm35, (float)referenceTemperature, ventoinha, resistor);
+    }
     pause();
   }
   return 0;
