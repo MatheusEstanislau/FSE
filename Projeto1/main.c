@@ -3,7 +3,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "bme280/bme280.h"
-#include "uartModBus/uart.h"
+#include "gpioModbus/gpio.h"
 #include "i2c/i2c.h"
 #include "pwm/wiringPi.h"
 #include "pid/pid.h"
@@ -11,11 +11,15 @@
 
 float cooler;
 float resistor;
-int writeCounter = 0;
+
 float userTemperature;
-float referenceTemperature = 0;
 float potentiometer, lm35;
+float referenceTemperature = 0;
 int switchMode = 0;
+int externalTemperature, Pressure, Humidity;
+
+int writeCounter = 0;
+
 void poweroff()
 {
   printf("\nDesligando Sistema\n");
@@ -51,9 +55,21 @@ void userInsertStop()
     break;
   case 1:
     printf("\nInsira a temperatura desejada: \n");
+    printf("Digite um valor entre %.2f°C e 90ºC\n", (float)externalTemperature / 100);
     scanf("%f", &userTemperature);
-    printf("Alterando para temperatura escolhida: %f\n", userTemperature);
+    if (userTemperature > 90 || userTemperature < (float)externalTemperature / 100)
+    {
+      printf("Temperatura inválida\n");
+    }
+    else
+    {
+      referenceTemperature = userTemperature;
+      printf("Alterando para temperatura escolhida: %f\n", userTemperature);
+    }
   default:
+    printf("Opção inválida\n");
+    switchMode = 0;
+    referenceTemperature = potentiometer;
     break;
   }
 }
@@ -62,7 +78,6 @@ int main(int argc, char const *argv[])
 {
   int initialize;
 
-  int Temperature, Pressure, Humidity;
   wiringPiSetup();
   initWrite();
   initializeUart();
@@ -84,7 +99,7 @@ int main(int argc, char const *argv[])
       referenceTemperature = userTemperature;
     }
     lm35 = getLM35Data();
-    bme280ReadValues(&Temperature, &Pressure, &Humidity);
+    bme280ReadValues(&externalTemperature, &Pressure, &Humidity);
     pid_atualiza_referencia(referenceTemperature);
 
     double controle = pid_controle(lm35);
@@ -108,25 +123,25 @@ int main(int argc, char const *argv[])
       disableCooler();
       disableResistor();
     }
-    printf("\n|-----------------------------------------------------------|\n");
-    printf("|                                                           |\n");
-    printf("|     Text = %.2f ºC, Tint. = %.2f ºC  Tref = %.2f ºC    |\n", (float)Temperature / 100, lm35, referenceTemperature);
-    printf("|         Uso cooler: %.2f %% Uso Resistor: %.2f %%         |\n", cooler, resistor);
-    printf("|  digite: ctrl + z para alterar modo de temperatura        |\n");
+    printf("\n|------------------------------------------------------------|\n");
+    printf("|                                                            |\n");
+    printf("|     Text = %.2f ºC, Tint. = %.2f ºC  Tref = %.2f ºC     |\n", (float)externalTemperature / 100, lm35, referenceTemperature);
+    printf("|         Uso cooler: %.2f %% Uso Resistor: %.2f %%         |\n", cooler * -1, resistor);
+    printf("|     Digite: ctrl + z para alterar modo de temperatura      |\n");
     if (switchMode == 0)
     {
-      printf("|              Referencia: Potenciometro                     |\n");
+      printf("|                   Referencia: Potenciometro                |\n");
     }
     else
     {
-      printf("|                  Referencia: Usuario                         |\n");
+      printf("|                     Referencia: Usuario                     |\n");
     }
-    printf("|            Digite: ctrl + c para encerrar                 |\n");
-    printf("|-----------------------------------------------------------|\n");
-    writeInLcd(referenceTemperature, lm35, (float)Temperature / 100);
+    printf("|            Digite: ctrl + c para encerrar                  |\n");
+    printf("|------------------------------------------------------------|\n");
+    writeInLcd(referenceTemperature, lm35, (float)externalTemperature / 100);
     if (writeCounter == 2)
     {
-      writeInCsv((float)Temperature / 100, (float)lm35, (float)referenceTemperature, cooler, resistor);
+      writeInCsv((float)externalTemperature / 100, (float)lm35, (float)referenceTemperature, cooler, resistor);
     }
     pause();
   }

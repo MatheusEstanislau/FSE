@@ -1,24 +1,28 @@
-output.o: i2c/i2c.o i2c/i2c.o bme280/bme280.o uartModBus/uart.o uartModBus/crc.o pwm/wiringPi.o pid/pid.o file/writeCsv.o
-	gcc uartModBus/crc.o bme280/bme280.o uartModBus/uart.o i2c/i2c.o pwm/wiringPi.o pid/pid.o file/writeCsv.o main.c -o output -lwiringPi -lpthread
+output.o: crc.o i2c.o bme280.o gpio.o pid.o file.o pwm.o
+	gcc binaries/crc.o binaries/bme280.o binaries/gpio.o binaries/i2c.o binaries/wiringPi.o binaries/pid.o binaries/writeCsv.o main.c -o output -lwiringPi -lpthread
+
 file.o: file/writeCsv.c
-	gcc file/writeCsv.c -o file/writeCsv.o
+	gcc -c file/writeCsv.c -o binaries/writeCsv.o
 
 pid.o: pid/pid.c
-	gcc pid/pid.c -o pid/pid.o
+	gcc -c pid/pid.c -o binaries/pid.o
 
 pwm.o: pwm/wiringPi.c
-	gcc pwm/wiringPi.c -o pwm/wiringPi.o -lwiringPi -lpthread
+	gcc -c pwm/wiringPi.c -o binaries/wiringPi.o -lwiringPi -lpthread
 
 i2c.o: i2c/i2c.c
-	gcc i2c/i2c.c -o i2c/i2c.o -lwiringPi
+	gcc -c i2c/i2c.c -o binaries/i2c.o -lwiringPi
 
 bme280.o: bme280/bme280.c
-	gcc bme280/bme280.c -o bme280/bme280.o
+	gcc -c bme280/bme280.c -o binaries/bme280.o
 
-uart.o: uartModBus/uart.c
-	gcc uartModBus/uart.c -o uartModBus/uart.o
+gpio.o: gpioModbus/gpio.c
+	gcc -c gpioModbus/gpio.c -o binaries/gpio.o
 
-crc.o: uartModBus/crc.c
-	gcc uartModBus/crc.c -o uartModBus/crc.o
+crc.o: gpioModbus/crc.c
+	mkdir binaries
+	gcc -c gpioModbus/crc.c -o binaries/crc.o	
 
 clear:
+	rm -r binaries
+	rm output
