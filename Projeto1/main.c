@@ -126,7 +126,7 @@ int main(int argc, char const *argv[])
     printf("\n|------------------------------------------------------------|\n");
     printf("|                                                            |\n");
     printf("|     Text = %.2f ºC, Tint. = %.2f ºC  Tref = %.2f ºC     |\n", (float)externalTemperature / 100, lm35, referenceTemperature);
-    printf("|             Uso cooler: %.0f %% Uso Resistor: %.0f %%             |\n", (cooler * -1), resistor);
+    printf("|             Uso cooler: %.0d %% Uso Resistor: %.0f %%             |\n", abs(cooler), resistor);
     printf("|     Digite: ctrl + z para alterar modo de temperatura      |\n");
     if (switchMode == 0)
     {
