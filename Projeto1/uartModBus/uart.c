@@ -53,8 +53,18 @@ void uartWriting(int packageLenght)
 
 void uartReading()
 {
+  int attempts;
   usleep(200000);
   int rx_length = read(uart0_filestream, (void *)rx_buffer, 255);
+  if (rx_length < 0) {
+    attempts ++;
+    if(attempts > 3) {
+      printf("\nImpossivel realizar leitura, saindo...\n");
+      exit(1);
+    }
+    printf("\nErro na leitura, tentando novamente\n");
+    uartReading();
+  }
 }
 
 void calculateCRC(int packageLenght)

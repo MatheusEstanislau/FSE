@@ -3,7 +3,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "bme280/bme280.h"
-#include "gpioModbus/gpio.h"
+#include "uartModBus/uart.h"
 #include "i2c/i2c.h"
 #include "pwm/wiringPi.h"
 #include "pid/pid.h"
@@ -22,11 +22,11 @@ int writeCounter = 0;
 
 void poweroff()
 {
-  printf("\nDesligando Sistema\n");
+  printf("\n...Desligando Sistema\n");
   disableCooler();
   disableResistor();
   ClrLcd();
-  printf("...Sistema Desligado\n");
+  printf("Sistema Desligado\n");
   exit(0);
 }
 
@@ -76,16 +76,29 @@ void userInsertStop()
 
 int main(int argc, char const *argv[])
 {
+  int pwm;
   int initialize;
+  pwm = wiringPiSetup();
+  if (pwm < 0)
+  { 
+    printf("Não foi possivel inicializar o pwm");
+    exit(1);
+  }
+  initialize = bme280Init(1, 0x76);
+  if (initialize != 0)
+  {
+    printf("Erro na leitura do bme280");
+    exit(1);
+  }
 
-  wiringPiSetup();
-  initWrite();
   initializeUart();
   pid_configura_constantes(5.0, 1.0, 5.0);
-  initialize = bme280Init(1, 0x76);
+
+  initWrite();
   signal(SIGINT, poweroff);
   signal(SIGALRM, waitFunction);
   alarm(1);
+
   while (1)
   {
     signal(SIGTSTP, userInsertStop);
@@ -134,7 +147,7 @@ int main(int argc, char const *argv[])
     }
     else
     {
-      printf("|                     Referencia: Usuario                     |\n");
+      printf("|                     Referencia: Usuario                    |\n");
     }
     printf("|              Digite: ctrl + c para encerrar                |\n");
     printf("|------------------------------------------------------------|\n");

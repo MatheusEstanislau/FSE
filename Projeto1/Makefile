@@ -1,4 +1,4 @@
-output.o: crc.o i2c.o bme280.o gpio.o pid.o file.o pwm.o
+output.o: crc.o i2c.o bme280.o uart.o pid.o file.o pwm.o
 	gcc binaries/* main.c -o output -lwiringPi -lpthread
 
 file.o: file/writeCsv.c
@@ -16,11 +16,11 @@ i2c.o: i2c/i2c.c
 bme280.o: bme280/bme280.c
 	gcc -c bme280/bme280.c -o binaries/bme280.o
 
-gpio.o: gpioModbus/gpio.c
-	gcc -c gpioModbus/gpio.c -o binaries/gpio.o
+uart.o: uartModBus/uart.c
+	gcc -c uartModBus/uart.c -o binaries/uart.o
 
-crc.o: gpioModbus/crc.c
-	gcc -c gpioModbus/crc.c -o binaries/crc.o	
+crc.o: uartModBus/crc.c
+	gcc -c uartModBus/crc.c -o binaries/crc.o	
 
 clear:
 	rm -rf binaries/*
