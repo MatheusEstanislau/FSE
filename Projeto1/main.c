@@ -42,7 +42,6 @@ void waitFunction()
 
 void userInsertStop()
 {
-
   printf("\nQual modo de referência deseja utilizar?\n");
   printf("Digite 0, para potenciometro\n");
   printf("Digite 1 para entrar com sua temperatura\n");
@@ -65,6 +64,7 @@ void userInsertStop()
     {
       referenceTemperature = userTemperature;
       printf("Alterando para temperatura escolhida: %f\n", userTemperature);
+      break;
     }
   default:
     printf("Opção inválida\n");
@@ -126,7 +126,7 @@ int main(int argc, char const *argv[])
     printf("\n|------------------------------------------------------------|\n");
     printf("|                                                            |\n");
     printf("|     Text = %.2f ºC, Tint. = %.2f ºC  Tref = %.2f ºC     |\n", (float)externalTemperature / 100, lm35, referenceTemperature);
-    printf("|         Uso cooler: %.2f %% Uso Resistor: %.2f %%         |\n", cooler * -1, resistor);
+    printf("|             Uso cooler: %.0f %% Uso Resistor: %.0f %%             |\n", (cooler * -1), resistor);
     printf("|     Digite: ctrl + z para alterar modo de temperatura      |\n");
     if (switchMode == 0)
     {
@@ -136,7 +136,7 @@ int main(int argc, char const *argv[])
     {
       printf("|                     Referencia: Usuario                     |\n");
     }
-    printf("|            Digite: ctrl + c para encerrar                  |\n");
+    printf("|              Digite: ctrl + c para encerrar                |\n");
     printf("|------------------------------------------------------------|\n");
     writeInLcd(referenceTemperature, lm35, (float)externalTemperature / 100);
     if (writeCounter == 2)

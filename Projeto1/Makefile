@@ -1,5 +1,5 @@
 output.o: crc.o i2c.o bme280.o gpio.o pid.o file.o pwm.o
-	gcc binaries/crc.o binaries/bme280.o binaries/gpio.o binaries/i2c.o binaries/wiringPi.o binaries/pid.o binaries/writeCsv.o main.c -o output -lwiringPi -lpthread
+	gcc binaries/* main.c -o output -lwiringPi -lpthread
 
 file.o: file/writeCsv.c
 	gcc -c file/writeCsv.c -o binaries/writeCsv.o
@@ -20,9 +20,8 @@ gpio.o: gpioModbus/gpio.c
 	gcc -c gpioModbus/gpio.c -o binaries/gpio.o
 
 crc.o: gpioModbus/crc.c
-	mkdir binaries
 	gcc -c gpioModbus/crc.c -o binaries/crc.o	
 
 clear:
-	rm -r binaries
+	rm -rf binaries/*
 	rm output
