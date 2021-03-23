@@ -52,6 +52,9 @@ Ao digitar ctrl+c o sistema será desligado
 Os resultados obtidos foram armazenados em um csv e a partir de seus dados foram gerados gráficos com a biblioteca Plotly em Python.
 Dados foram colhidos a cada 2 segundos, para melhor exibição do gráfico o intervalo foi alterado.
 
+### Dados conjuntos
+![gráfico1](https://raw.githubusercontent.com/MatheusEstanislau/FSE/master/Projeto1/allData.png)
+
 ### Temperaturas
   ![gráfico1](https://raw.githubusercontent.com/MatheusEstanislau/FSE/master/Projeto1/graph1.png)
   
