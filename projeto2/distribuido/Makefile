@@ -8,9 +8,10 @@ windowsController:
 	g++ -c controller/windows/windowsController.cpp -o binaries/windows.o
 
 lampsController:
+	mkdir binaries
 	g++ -c controller/lamps/lampsController.cpp -o binaries/lamps.o
 
-bme280.o: createFolder
+bme280.o:
 	gcc -c bme280/bme280.c -o binaries/bme280.o
 	g++ -c bme280/bme-read-values.cpp -o binaries/bme.o
 
