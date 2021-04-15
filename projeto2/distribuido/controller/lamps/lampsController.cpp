@@ -1,5 +1,14 @@
 #include "lampsController.hpp"
 
+void LampsController::initializeGpio() {
+  int initializeWirinpi = wiringPiSetup();
+  if (initializeWirinpi < 0)
+  {
+    cout << "Não foi possivel iniciar wiringPi";
+    exit(1);
+  }
+}
+
 void LampsController::powerOn(int pin)
 {
   if (pin > 3)
