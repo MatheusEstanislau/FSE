@@ -13,14 +13,16 @@ void Menu::displayMenu()
   cout << "Press 8 to turn off the lamp 4" << endl;
   cout << "Press 9 to turn on the air conditioner 1" << endl;
   cout << "Press 10 to turn on the air conditioner 2" << endl;
-  cout << "Press 11 close program" << endl;
+  cout << "Press 11 to turn off the air conditioner 1" << endl;
+  cout << "Press 12 to turn off the air conditioner 2" << endl;
+  cout << "Press 13 close program" << endl;
   cin >> option;
-  if(option < 1 || option > 10) 
+  if(option < 1 || option > 13) 
   {
     cout << "Invalid Option" << endl;
     displayMenu();
   }
-  else if(option == 11) 
+  else if(option == 13) 
   {
     cout << "Finished program" << endl;
     exit(0);

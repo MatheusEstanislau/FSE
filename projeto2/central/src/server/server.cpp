@@ -1,50 +1,51 @@
 #include "server.hpp"
+#include <string>
+#include <vector>
+#include <string.h>
 
-void Server::callServer(int request) {
+char buffer[16];
+
+void Server::callServer(int request)
+{
 	int clienteSocket;
 	struct sockaddr_in serverAddr;
 	unsigned short servidorPorta;
-	char mensagem;
-	char buffer[16];
-	unsigned int tamanhoMensagem;
 
-	mensagem = request +'0';
+	string mensagem = to_string(request);
 
+	int tamanhoMensagem;
 	int bytesRecebidos;
 	int totalBytesRecebidos;
 
 	// Criar Socket
 	if ((clienteSocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-		printf("Erro no socket()\n");
+		cout << "Error in socket" << endl;
 
 	// Construir struct sockaddr_in
 	memset(&serverAddr, 0, sizeof(serverAddr)); // Zerando a estrutura de dados
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = inet_addr("192.168.0.52");
+	serverAddr.sin_addr.s_addr = inet_addr("192.168.0.4");
 	serverAddr.sin_port = htons(10108);
 
 	// Connect
 	if (connect(clienteSocket, (struct sockaddr *)&serverAddr,
 							sizeof(serverAddr)) < 0)
-		printf("Erro no connect()\n");
+		cout << "Connect Error" << endl;
 
-	tamanhoMensagem = strlen(&mensagem);
+	tamanhoMensagem = mensagem.length();
 
-	if (send(clienteSocket, &mensagem, tamanhoMensagem, 0) != tamanhoMensagem)
-		printf("Erro no envio: numero de bytes enviados diferente do esperado\n");
+	if (send(clienteSocket, mensagem.c_str(), mensagem.length(), 0) != tamanhoMensagem)
+		printf("\n");
 
 	totalBytesRecebidos = 0;
-	while (totalBytesRecebidos < tamanhoMensagem)
-	{
-		if ((bytesRecebidos = recv(clienteSocket, buffer, 16 - 1, 0)) <= 0)
-			printf("Não recebeu o total de bytes enviados\n");
-		totalBytesRecebidos += bytesRecebidos;
-		buffer[bytesRecebidos] = '\0';
-    response = atoi(buffer);
-	}
+	vector<char> buf(5000); // you are using C++ not C
+	int bytes = recv(clienteSocket, buf.data(), buf.size(), 0);
+	string s(buf.begin(), buf.end());
+	response = s;
 	close(clienteSocket);
 }
 
-int Server::getResponse(){
-  return response;
+string Server::getResponse()
+{
+	return response;
 }
