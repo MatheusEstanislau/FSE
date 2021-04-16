@@ -1,4 +1,4 @@
-output.o: lampsController windowsController doorController bmeController
+output.o: lampsController windowsController doorController bmeController airConditionerController
 	g++ binaries/* server.cpp -o server.o -lwiringPi
 
 bmeController:
@@ -11,6 +11,9 @@ doorController:
 windowsController:
 	g++ -c controller/windows/windowsController.cpp -o binaries/windows.o
 
+airConditionerController:
+	g++ -c controller/airConditioner/airConditioner.cpp -o binaries/air.o
+
 lampsController:
 	mkdir binaries
 	g++ -c controller/lamps/lampsController.cpp -o binaries/lamps.o
@@ -20,6 +23,6 @@ bme280.o:
 	g++ -c bme280/bme-read-values.cpp -o binaries/bme.o
 
 delete:
-	rm output
+	rm server.o
 	rm -r binaries
 

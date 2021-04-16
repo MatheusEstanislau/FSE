@@ -7,6 +7,6 @@ class LampsController
 {
 public:
   void initializeGpio();
-  void powerOn(int pin);
-  void powerOff(int pin);
+  string powerOn(int pin);
+  string powerOff(int pin);
 };

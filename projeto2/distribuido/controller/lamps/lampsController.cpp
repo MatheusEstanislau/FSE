@@ -1,4 +1,5 @@
 #include "lampsController.hpp"
+#include <string>
 
 void LampsController::initializeGpio() {
   int initializeWirinpi = wiringPiSetup();
@@ -9,7 +10,7 @@ void LampsController::initializeGpio() {
   }
 }
 
-void LampsController::powerOn(int pin)
+string LampsController::powerOn(int pin)
 {
   if (pin > 3)
   {
@@ -19,11 +20,12 @@ void LampsController::powerOn(int pin)
   {
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
-    cout << "Lampada " << pin + 1 << " Ligada" << endl;
+    string s;
+    return s = "Lam " + to_string(pin + 1) + " turn on";
   }
 }
 
-void LampsController::powerOff(int pin)
+string LampsController::powerOff(int pin)
 {
   if (pin > 3)
   {
@@ -33,6 +35,7 @@ void LampsController::powerOff(int pin)
   {
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);
-    cout << "Lampada " << pin + 1 << " Desligada" << endl;
+    string s;
+    return s = "Lam " + to_string(pin + 1) + " turn off";
   }
 }

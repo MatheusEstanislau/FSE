@@ -13,7 +13,16 @@ void BmeController::initializeBme()
 void BmeController::readValues()
 {
   bme280ReadValues(&temperature, &pression, &humidity);
-  cout << temperature / 100 << endl
-       << pression / 256 << endl
-       << humidity / 1024 << endl;
+}
+
+float BmeController::getTemperature(){
+  return temperature/100.0;
+}
+
+float BmeController::getPression(){
+  return pression/256.0;
+}
+
+float BmeController::getHumidity(){
+  return humidity/1024.0;
 }
