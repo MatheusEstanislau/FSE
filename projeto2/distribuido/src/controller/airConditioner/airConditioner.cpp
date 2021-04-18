@@ -1,39 +1,37 @@
 #include "airConditioner.hpp"
 
-void AirConditionerController::powerOn(int pin)
+string AirConditionerController::powerOn(int pin)
 {
+  string s;
   switch (pin)
   {
   case 23:
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
-    cout << "Air Conditioner on" << endl;
-    break;
+    return s = "Air conditioner 1 turn on";
   case 24:
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
-    cout << "Air Conditioner on" << endl;
-    break;
+    return s = "Air conditioner 2 turn on";
   default:
-    break;
+    return s;
   }
 }
 
-void AirConditionerController::powerOff(int pin)
+string AirConditionerController::powerOff(int pin)
 {
+  string s;
   switch (pin)
   {
   case 23:
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);
-    cout << "Air Conditioner off" << endl;
-    break;
+    return s = "Air conditioner 1 turn off";
   case 24:
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);
-    cout << "Air Conditioner off" << endl;
-    break;
+    return s = "Air conditioner 2 turn off";
   default:
-    break;
+    return s;
   }
 }

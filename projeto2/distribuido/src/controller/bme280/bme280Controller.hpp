@@ -15,4 +15,7 @@ class BmeController
 public:
   void initializeBme();
   void readValues();
+  float getTemperature();
+  float getPression();
+  float getHumidity();
 };

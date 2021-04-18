@@ -6,6 +6,6 @@ using namespace std;
 class AirConditionerController
 {
 public:
-  void powerOn(int pin);
-  void powerOff(int pin);
+  string powerOn(int pin);
+  string powerOff(int pin);
 };
