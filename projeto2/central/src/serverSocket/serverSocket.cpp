@@ -5,12 +5,18 @@ using namespace std;
 int ditrinutedSocket;
 int clientSocket;
 
-void socketTreatment(int clientSocket)
+void socketTreatment(int clientSocket, bool alarmParam)
 {
 	vector<char> buf(5000);
 	int bytes = recv(clientSocket, buf.data(), buf.size(), 0);
 	string s(buf.begin(), buf.end());
-	cout << s << endl;
+
+	if (alarmParam)
+	{
+		cout << s << endl;
+		cout << "Tocar Alarme" << endl;
+	}
+
 	buf.clear();
 }
 
@@ -42,7 +48,7 @@ void SocketServer::runSocketServer()
 															 (struct sockaddr *)&clientAddr,
 															 &clientLength)) < 0)
 			printf("Accept Failed\n");
-		socketTreatment(clientSocket);
+		socketTreatment(clientSocket, alarmState);
 		printf("Cliente Connection %s\n", inet_ntoa(clientAddr.sin_addr));
 		close(clientSocket);
 	}
@@ -55,11 +61,13 @@ void SocketServer::closeSocket()
 	close(ditrinutedSocket);
 }
 
-bool SocketServer::getAlarm() {
+bool SocketServer::getAlarm()
+{
 	return alarmState;
 }
 
-void SocketServer::setAlarm(bool state) {
+void SocketServer::setAlarm(bool state)
+{
 	alarmState = state;
 }
 

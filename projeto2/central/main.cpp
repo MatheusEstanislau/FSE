@@ -43,6 +43,9 @@ void *threadFunction2(void *)
 		{
 			menu.displayMenu();
 			command = menu.getCommand();
+			if (command == 13) {
+				alarmSocket.setAlarm(true);
+			}
 			server.callServer(command);
 			cout << server.getResponse() << endl;
 			flagStop = 0;
