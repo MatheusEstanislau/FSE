@@ -6,7 +6,8 @@ menu:
 	g++ -c src/menu/menu.cpp -o binaries/menu.o
 
 server:
-	g++ -c src/server/server.cpp -o binaries/server.o
+	g++ -c src/clientSocket/server.cpp -o binaries/client.o
+	g++ -c src/serverSocket/serverSocket.cpp -o binaries/server.o
 
 delete:
 	rm output
