@@ -1,28 +1,35 @@
-output.o: lampsController windowsController doorController bmeController airConditionerController
-	g++ binaries/* server.cpp -o server.o -lwiringPi
+output.o: createFolder lampsController windowsController doorController bmeController airConditionerController server gpioController
+	g++ binaries/* src/main.cpp -o server.o -lwiringPi
+
+server:
+	g++ -c src/app/server/server.cpp -o binaries/socketServer.o
+	g++ -c src/app/client/socketClient.cpp -o binaries/socketClient.o
 
 bmeController:
-	gcc -c controller/bme280/bme280.c -o binaries/bme280.o 
-	g++ -c controller/bme280/bme280Controller.cpp binaries/bme280.o -o binaries/bme.o -lwiringPi
+	gcc -c src/controller/bme280/bme280.c -o binaries/bme280.o 
+	g++ -c src/controller/bme280/bme280Controller.cpp -o binaries/bme.o
 
 doorController:
-	g++ -c controller/doors/doorsController.cpp -o binaries/doors.o
+	g++ -c src/controller/doors/doorsController.cpp -o binaries/doors.o
 
 windowsController:
-	g++ -c controller/windows/windowsController.cpp -o binaries/windows.o
+	g++ -c src/controller/windows/windowsController.cpp -o binaries/windows.o
 
 airConditionerController:
-	g++ -c controller/airConditioner/airConditioner.cpp -o binaries/air.o
+	g++ -c src/controller/airConditioner/airConditioner.cpp -o binaries/air.o
 
 lampsController:
-	mkdir binaries
-	g++ -c controller/lamps/lampsController.cpp -o binaries/lamps.o
+	g++ -c src/controller/lamps/lampsController.cpp -o binaries/lamps.o
 
-bme280.o:
-	gcc -c bme280/bme280.c -o binaries/bme280.o
-	g++ -c bme280/bme-read-values.cpp -o binaries/bme.o
+gpioController:
+	g++ -c src/controller/gpio/gpioController.cpp -o binaries/gpio.o
 
-delete:
-	rm server.o
-	rm -r binaries
+createFolder:
+	if [ ! -f ./binaries/air.o ]; then \
+		mkdir ./binaries; \
+	fi
 
+clean:
+	if [ -f ./binaries/air.o ]; then \
+		rm -r ./binaries; \
+	fi

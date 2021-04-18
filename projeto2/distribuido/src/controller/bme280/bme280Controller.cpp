@@ -16,7 +16,8 @@ void BmeController::readValues()
 }
 
 float BmeController::getTemperature(){
-  return temperature/100.0;
+  float value = (int)((temperature/100) * 100 + .5);
+  return (float)value / 100;
 }
 
 float BmeController::getPression(){

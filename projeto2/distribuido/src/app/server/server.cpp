@@ -1,27 +1,13 @@
-#include <iostream>
-#include <sstream>
-#include <stdlib.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <string>
-#include <string.h>
-
-#include "controller/lamps/lampsController.hpp"
-#include "controller/windows/windowController.hpp"
-#include "controller/doors/doorsController.hpp"
-#include "controller/bme280/bme280Controller.hpp"
-#include "controller/airConditioner/airConditioner.hpp"
+#include "socketServer.hpp"
 
 using namespace std;
 
 AirConditionerController air;
-WindowsController window;
 LampsController lamp;
-DoorsController door;
 BmeController bme;
+
+int ditrinutedSocket;
+int clientSocket;
 
 void socketTreatment(int socketCliente)
 {
@@ -32,70 +18,66 @@ void socketTreatment(int socketCliente)
 	if ((tamanhoRecebido = recv(socketCliente, buffer, 16, 0)) < 0)
 		printf("Error in recv()\n");
 
-	string mensagem;
+	string message;
 
 	switch (atoi(buffer))
 	{
 	case 1:
-		mensagem = lamp.powerOn(0);
+		message = lamp.powerOn(0);
 		break;
 	case 2:
-		mensagem = lamp.powerOn(1);
+		message = lamp.powerOn(1);
 		break;
 	case 3:
-		mensagem = lamp.powerOn(2);
+		message = lamp.powerOn(2);
 		break;
 	case 4:
-		mensagem = lamp.powerOn(3);
+		message = lamp.powerOn(3);
 		break;
 	case 5:
-		mensagem = lamp.powerOff(0);
+		message = lamp.powerOff(0);
 		break;
 	case 6:
-		mensagem = lamp.powerOff(1);
+		message = lamp.powerOff(1);
 		break;
 	case 7:
-		mensagem = lamp.powerOff(2);
+		message = lamp.powerOff(2);
 		break;
 	case 8:
-		mensagem = lamp.powerOff(3);
+		message = lamp.powerOff(3);
 		break;
 	case 9:
-		air.powerOn(23);
+		message = air.powerOn(23);
 		break;
 	case 10:
-		air.powerOn(24);
+		message = air.powerOn(24);
 		break;
 	case 11:
-		air.powerOff(23);
+		message = air.powerOff(23);
 		break;
 	case 12:
-		air.powerOff(24);
+		message = air.powerOff(24);
 		break;
 	case 15:
 	{
 		bme.readValues();
-		float temperature = bme.getTemperature();
-		float humidity = bme.getHumidity();
-		mensagem = "Temperatura: " + to_string(temperature) + " Humidade: " + to_string(humidity) + "%";
+		int temperature = bme.getTemperature();
+		int humidity = bme.getHumidity();
+		message = "Temperature: " + to_string(temperature) + " ºC" + " Humidity: " + to_string(humidity) + "%";
 	}
 
 	default:
 		break;
 	}
-	cout << mensagem << endl;
-	send(socketCliente, mensagem.c_str(), mensagem.length(), 0);
-	mensagem.clear();
+	cout << message << endl;
+	send(socketCliente, message.c_str(), message.length(), 0);
+	message.clear();
 	memset(buffer, 0, sizeof buffer);
 }
 
-int main()
+void SocketServer::runSocketServer()
 {
-	lamp.initializeGpio();
-	bme.initializeBme();
-
-	int ditrinutedSocket;
-	int clientSocket;
+	//bme.initializeBme();
 
 	struct sockaddr_in distributedServerAddr;
 	struct sockaddr_in clientAddr;
@@ -127,6 +109,10 @@ int main()
 		close(clientSocket);
 	}
 	close(ditrinutedSocket);
+}
 
-	return 0;
+void SocketServer::closeSocket()
+{
+	close(ditrinutedSocket);
+	close(clientSocket);
 }
