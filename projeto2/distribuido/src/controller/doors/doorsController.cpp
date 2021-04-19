@@ -1,9 +1,9 @@
 #include "doorsController.hpp"
 
-void DoorsController::readValue(int pin) {
+string DoorsController::readValue(int pin) {
   if ( pin != 21 && pin != 26 )
   {
-    cout << "Invalid Pin" << endl;
+    return "Invalid Pin\n";
   }
   else
   {
@@ -13,6 +13,6 @@ void DoorsController::readValue(int pin) {
     pinMode(pin,INPUT);
     int response = digitalRead(pin);
     response == 0 ? state = "closed" : state = "opened";
-    cout << "Door " << door << " " << state << endl;
+    return "Door " + door + ": " + state + "\n";
   }
 }

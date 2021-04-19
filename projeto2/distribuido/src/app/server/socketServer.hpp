@@ -12,6 +12,9 @@
 #include "../../controller/lamps/lampsController.hpp"
 #include "../../controller/bme280/bme280Controller.hpp"
 #include "../../controller/airConditioner/airConditioner.hpp"
+#include "../../controller/windows/windowController.hpp"
+#include "../../controller/presenceSensor/presenceSensorController.hpp"
+#include "../../controller/doors/doorsController.hpp"
 
 class SocketServer 
 {
