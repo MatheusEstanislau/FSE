@@ -12,4 +12,5 @@ class Server {
   public: 
     void callServer(int request);
     string getResponse();
+    void closeSocket();
 };

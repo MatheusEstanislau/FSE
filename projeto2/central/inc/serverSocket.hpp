@@ -15,6 +15,7 @@ using namespace std;
 
 class SocketServer 
 {
+  void socketTreatment(int clientSocket);
   string response;
   bool alarmState = false;
 public:
