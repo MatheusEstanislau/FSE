@@ -25,6 +25,7 @@ void poweroff(int exitAlarm)
 
 void sendAlarm()
 {
+  cout << "alarme" << endl;
   alarmSocket.callServer();
   cout << alarmSocket.getResponse() << endl;
   alarmSocket.closeSocket();

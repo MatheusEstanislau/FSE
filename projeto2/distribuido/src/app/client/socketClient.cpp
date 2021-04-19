@@ -14,7 +14,7 @@ void SocketClient::callServer()
 	struct sockaddr_in serverAddr;
 	unsigned short servidorPorta;
 
-	string mensagem = "Alarme";
+	string mensagem = "Sensor detected presence\n alarm trigger";
 
 	int tamanhoMensagem;
 	int bytesRecebidos;
@@ -32,13 +32,13 @@ void SocketClient::callServer()
 							sizeof(serverAddr)) < 0)
 		cout << "Connect Error" << endl;
 
-	if (send(clienteSocket, mensagem.c_str(), mensagem.length(), 0) != tamanhoMensagem)
-		printf("\n");
+	send(clienteSocket, mensagem.c_str(), mensagem.length(), 0);
 	totalBytesRecebidos = 0;
 	vector<char> buf(5000);
 	int bytes = recv(clienteSocket, buf.data(), buf.size(), 0);
 	string s(buf.begin(), buf.end());
-	response = s;
+	cout << mensagem << endl;
+	mensagem.clear();
 }
 
 void SocketClient::closeSocket()

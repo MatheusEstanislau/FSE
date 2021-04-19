@@ -5,6 +5,9 @@ using namespace std;
 AirConditionerController air;
 LampsController lamp;
 BmeController bme;
+PresenceSensor presence;
+DoorsController doors;
+WindowsController windows;
 
 int ditrinutedSocket;
 int clientSocket;
@@ -34,22 +37,22 @@ void socketTreatment(int socketCliente)
 	case 4:
 		message = lamp.powerOn(3);
 		break;
-	case 5:
+	case 7:
 		message = lamp.powerOff(0);
 		break;
-	case 6:
+	case 8:
 		message = lamp.powerOff(1);
 		break;
-	case 7:
+	case 9:
 		message = lamp.powerOff(2);
 		break;
-	case 8:
+	case 10:
 		message = lamp.powerOff(3);
 		break;
-	case 9:
+	case 5:
 		message = air.powerOn(23);
 		break;
-	case 10:
+	case 6:
 		message = air.powerOn(24);
 		break;
 	case 11:
@@ -57,6 +60,9 @@ void socketTreatment(int socketCliente)
 		break;
 	case 12:
 		message = air.powerOff(24);
+		break;
+	case 16:
+		message = presence.readValue(6) + presence.readValue(25) + doors.readValue(21) + doors.readValue(26) + windows.readValue(22) + windows.readValue(27) + windows.readValue(28) + windows.readValue(29);
 		break;
 	case 15:
 	{

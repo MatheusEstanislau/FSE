@@ -13,7 +13,7 @@ string LampsController::powerOn(int pin)
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
 
-    return s = "Lam " + to_string(pin + 1) + " turn on";
+    return s = "Lamp " + to_string(pin + 1) + " turn on";
   }
 }
 

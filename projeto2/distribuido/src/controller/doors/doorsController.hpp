@@ -6,5 +6,5 @@ using namespace std;
 class DoorsController
 {
 public:
-  void readValue(int pin);
+  string readValue(int pin);
 };

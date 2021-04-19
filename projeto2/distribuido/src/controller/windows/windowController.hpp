@@ -6,5 +6,5 @@ using namespace std;
 class WindowsController
 {
 public:
-  void readValue(int pin);
+  string readValue(int pin);
 };
