@@ -1,4 +1,4 @@
-output.o: createFolders menu server
+output.o: createFolders menu server alarm
 	g++ obj/* src/main.cpp -o bin/app -std=c++11 -pthread
 
 menu:
@@ -9,6 +9,9 @@ server:
 	g++ -c src/serverSocket/serverSocket.cpp -o obj/server.o
 	g++ -c src/createLogs/generateLog.cpp -o obj/log.o
 	
+alarm:
+	g++ -c src/alarm/alarmHandler.cpp -o obj/alarm.o
+
 createFolders:
 	if [ ! -f ./bin/app ]; then \
 		mkdir bin; \

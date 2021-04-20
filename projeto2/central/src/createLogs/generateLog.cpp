@@ -4,15 +4,13 @@ using namespace std;
 
 void initWrite()
 {
-  FILE *f = fopen("project2.csv", "w");
+  FILE *f = fopen("logs/project2.csv", "w");
   fprintf(f, "Command, Alarm, Date, Hour\n");
   fclose(f);
 }
 
 void writeInCsv(int command, bool alarm)
 {
-  cout << command << endl;
-  cout << alarm << endl;
   string stringCommand;
   string stringAlarm;
   switch (command)
@@ -59,13 +57,16 @@ void writeInCsv(int command, bool alarm)
     case 14:
       stringCommand = "Turn off Alarm";
       break;
+    case 15:
+      stringCommand = "View All States";
+      break;
     default:
       break;
   }
   alarm == true ? stringAlarm = "Alarm activated" : stringAlarm = "Alarm off";
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
-  FILE *f = fopen("project2.csv", "a");
+  FILE *f = fopen("logs/project2.csv", "a");
   fprintf(f, "%s, %s, %d/%d/%d, %.2d:%.2d:%.2d\n",stringCommand.c_str(), stringAlarm.c_str(), tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
   fclose(f);
 }

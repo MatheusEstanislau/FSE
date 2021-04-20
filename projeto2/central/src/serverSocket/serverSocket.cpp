@@ -7,15 +7,15 @@ int clientSocket;
 
 void SocketServer::socketTreatment(int clientSocket)
 {
+	string response = "OK";
 	vector<char> buf(5000);
 	int bytes = recv(clientSocket, buf.data(), buf.size(), 0);
 	string s(buf.begin(), buf.end());
-	while (alarmState)
-	{
-		cout << "Tocar Alarme" << endl;
-		system("cd ..; omxplayer alarm.mp3 > /dev/null");
-	}
+	cout << s << endl;
+	response = "Ativar alarme";
+	send(clientSocket, response.c_str(), response.length(), 0);
 	buf.clear();
+	response.clear();
 }
 
 void SocketServer::runSocketServer()
@@ -59,15 +59,6 @@ void SocketServer::closeSocket()
 	close(centralSocket);
 }
 
-bool SocketServer::getAlarm()
-{
-	return alarmState;
-}
-
-void SocketServer::setAlarm(bool state)
-{
-	alarmState = state;
-}
 
 string SocketServer::getResponse()
 {

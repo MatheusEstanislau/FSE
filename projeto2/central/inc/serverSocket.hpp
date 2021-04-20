@@ -21,7 +21,5 @@ class SocketServer
 public:
   void runSocketServer();
   void closeSocket();
-  bool getAlarm();
-  void setAlarm(bool state);
   string getResponse();
 };

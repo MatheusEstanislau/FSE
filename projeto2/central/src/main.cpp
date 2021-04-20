@@ -5,11 +5,13 @@
 #include <unistd.h>
 #include <thread>
 #include <csignal>
+#include <iostream>
 
 #include "../inc/menu.hpp"
 #include "../inc/server.hpp"
 #include "../inc/serverSocket.hpp"
 #include "../inc/generateLog.hpp"
+#include "../inc/alarmHandler.hpp"
 
 using namespace std;
 
@@ -17,18 +19,27 @@ Menu menu;
 Server server;
 Server bmeValues;
 SocketServer alarmSocket;
+Alarm myAlarm;
 
 int flagStop = 0;
+
+string alarmSecret = "Ativar alarme";
+
+void monitoring()
+{
+	server.callServer(16);
+	cout << server.getResponse() << endl;
+}
 
 void poweroff(int exitAlarm)
 {
 	cout << endl
-			 << "...Desligando Sistema" << endl;
+			 << "...Shutting down the system" << endl;
 	alarmSocket.closeSocket();
 	bmeValues.closeSocket();
 	server.closeSocket();
 	cout << endl
-			 << "Sistema desligado" << endl;
+			 << "System off" << endl;
 	exit(0);
 }
 
@@ -37,7 +48,7 @@ void threadFunction()
 	while (1)
 	{
 		bmeValues.callServer(15);
-		if (flagStop == 0)
+		if (flagStop == 0 && !myAlarm.getAlarmState() && "Ativar alarme" == alarmSecret)
 		{
 			cout << bmeValues.getResponse() << endl;
 		}
@@ -50,36 +61,61 @@ void threadFunction2()
 	int command;
 	while (1)
 	{
+		int handler = 1;
+		if (myAlarm.getAlarmState() && "Ativar alarme" == alarmSecret)
+		{
+			myAlarm.playAlarm();
+		}
 		if (flagStop == 0)
 		{
-			cout << "Digite 1 para abrir o menu" << endl;
+			cout << "Insert 1 to open the menu" << endl;
 			cin >> flagStop;
 		}
 		else
 		{
-			menu.displayMenu();
-			command = menu.getCommand();
-			writeInCsv(command, alarmSocket.getAlarm());
-			if (command == 13)
+			while (handler != 0)
 			{
-				alarmSocket.setAlarm(true);
-			}
-			else if (command == 14)
-			{
-				alarmSocket.setAlarm(false);
-			}
-			else if (command == 15)
-			{
-				int temp;
-				server.callServer(16);
-				cout << server.getResponse() << endl;
-				cout << "Insira qualquer numero para continuar" << endl;
-				cin >> temp;
-			}
-			else
-			{
-				server.callServer(command);
-				cout << server.getResponse() << endl;
+				menu.displayMenu();
+				command = menu.getCommand();
+
+				if (command == 13)
+				{
+					myAlarm.setAlarmState(true);
+				}
+				else if (command == 14)
+				{
+					myAlarm.setAlarmState(false);
+				}
+				else if (command == 15)
+				{
+					int temp = 1;
+					while (temp != 0)
+					{
+						monitoring();
+						cout << "Enter 1 to re-monitor the system" << endl;
+						cin >> temp;
+						switch (temp)
+						{
+						case 0:
+							temp = 0;
+							break;
+						case 1:
+							break;
+						default:
+							cout << "Invalid option, exiting monitoring" << endl;
+							temp = 0;
+							break;
+						}
+					}
+				}
+				else
+				{
+					server.callServer(command);
+					cout << server.getResponse() << endl;
+				}
+				writeInCsv(command, myAlarm.getAlarmState());
+				cout << "Digite 1 para continuar, ou 0 para sair do menu" << endl;
+				cin >> handler;
 			}
 			flagStop = 0;
 		}
@@ -95,9 +131,9 @@ int main()
 {
 	signal(SIGINT, poweroff);
 	initWrite();
-	thread getBme (threadFunction);
-	thread menuHandler (threadFunction2);
-	thread alarmScoket (threadFunction3);
+	thread getBme(threadFunction);
+	thread menuHandler(threadFunction2);
+	thread alarmScoket(threadFunction3);
 	getBme.join();
 	menuHandler.join();
 	alarmScoket.join();
