@@ -1,13 +1,14 @@
-#include "server.hpp"
+#include "../../inc/server.hpp"
 #include <string>
 #include <vector>
 #include <string.h>
 
 char buffer[16];
 
+int clienteSocket;
+
 void Server::callServer(int request)
 {
-	int clienteSocket;
 	struct sockaddr_in serverAddr;
 	unsigned short servidorPorta;
 
@@ -48,4 +49,9 @@ void Server::callServer(int request)
 string Server::getResponse()
 {
 	return response;
+}
+
+void Server::closeSocket()
+{
+	close(clienteSocket);
 }
