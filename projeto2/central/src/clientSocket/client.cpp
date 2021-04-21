@@ -1,4 +1,4 @@
-#include "../../inc/server.hpp"
+#include "../../inc/clientSocket.hpp"
 #include <string>
 #include <vector>
 #include <string.h>
@@ -7,7 +7,7 @@ char buffer[16];
 
 int clienteSocket;
 
-void Server::callServer(int request)
+void ClientSocket::callServer(int request)
 {
 	struct sockaddr_in serverAddr;
 	unsigned short servidorPorta;
@@ -46,12 +46,12 @@ void Server::callServer(int request)
 	close(clienteSocket);
 }
 
-string Server::getResponse()
+string ClientSocket::getResponse()
 {
 	return response;
 }
 
-void Server::closeSocket()
+void ClientSocket::closeSocket()
 {
 	close(clienteSocket);
 }

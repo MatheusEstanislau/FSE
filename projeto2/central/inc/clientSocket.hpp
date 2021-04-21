@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class Server {
+class ClientSocket {
   string response;
   public: 
     void callServer(int request);

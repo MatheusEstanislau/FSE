@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "../inc/menu.hpp"
-#include "../inc/server.hpp"
+#include "../inc/clientSocket.hpp"
 #include "../inc/serverSocket.hpp"
 #include "../inc/generateLog.hpp"
 #include "../inc/alarmHandler.hpp"
@@ -16,8 +16,7 @@
 using namespace std;
 
 Menu menu;
-Server server;
-Server bmeValues;
+ClientSocket client;
 SocketServer alarmSocket;
 Alarm myAlarm;
 
@@ -25,8 +24,8 @@ int flagStop = 0;
 
 void monitoring()
 {
-	server.callServer(16);
-	cout << server.getResponse() << endl;
+	client.callServer(16);
+	cout << client.getResponse() << endl;
 }
 
 void poweroff(int exitAlarm)
@@ -34,8 +33,7 @@ void poweroff(int exitAlarm)
 	cout << endl
 			 << "...Shutting down the system" << endl;
 	alarmSocket.closeSocket();
-	bmeValues.closeSocket();
-	server.closeSocket();
+	client.closeSocket();
 	cout << endl
 			 << "System off" << endl;
 	exit(0);
@@ -45,10 +43,10 @@ void threadFunction()
 {
 	while (1)
 	{
-		bmeValues.callServer(15);
+		client.callServer(15);
 		if (flagStop == 0 && !myAlarm.getAlarmisRinging())
 		{
-			cout << bmeValues.getResponse() << endl;
+			cout << client.getResponse() << endl;
 		}
 		usleep(1000000);
 	}
@@ -104,8 +102,8 @@ void threadFunction2()
 				}
 				else
 				{
-					server.callServer(command);
-					cout << server.getResponse() << endl;
+					client.callServer(command);
+					cout << client.getResponse() << endl;
 				}
 				writeInCsv(command, myAlarm.getAlarmState(), myAlarm.getAlarmisRinging());
 				cout << "Digite 1 para continuar, ou 0 para sair do menu" << endl;

@@ -7,7 +7,7 @@ int clientSocket;
 
 void SocketServer::socketTreatment()
 {
-	string responseClient = "Turning on alarm";
+	string responseClient = "Ok, message received";
 	vector<char> buf(5000);
 	int bytes = recv(clientSocket, buf.data(), buf.size(), 0);
 	string s(buf.begin(), buf.end());

@@ -5,7 +5,7 @@ menu:
 	g++ -c src/menu/menu.cpp -o obj/menu.o
 
 server:
-	g++ -c src/clientSocket/server.cpp -o obj/client.o
+	g++ -c src/clientSocket/client.cpp -o obj/client.o
 	g++ -c src/serverSocket/serverSocket.cpp -o obj/server.o
 	g++ -c src/createLogs/generateLog.cpp -o obj/log.o
 	
