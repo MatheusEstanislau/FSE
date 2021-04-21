@@ -14,7 +14,7 @@ void SocketClient::callServer()
 	struct sockaddr_in serverAddr;
 	unsigned short servidorPorta;
 
-	string mensagem = "Sensor detected presence\n alarm trigger";
+	string mensagem = "Sensor detected presence";
 
 	int tamanhoMensagem;
 	int bytesRecebidos;

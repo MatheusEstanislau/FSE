@@ -1,4 +1,6 @@
 #include "socketServer.hpp"
+#include <chrono>
+#include <ctime>
 
 using namespace std;
 
@@ -11,6 +13,14 @@ WindowsController windows;
 
 int ditrinutedSocket;
 int clientSocket;
+
+string getTimeStr(){
+    time_t now = chrono::system_clock::to_time_t(chrono::system_clock::now());
+
+    string s(30, '\0');
+    strftime(&s[0], s.size(), "%Y/%m/%d %H:%M:%S", localtime(&now));
+    return s;
+}
 
 void socketTreatment(int socketCliente)
 {
@@ -75,8 +85,8 @@ void socketTreatment(int socketCliente)
 	default:
 		break;
 	}
-	cout << message << endl;
 	send(socketCliente, message.c_str(), message.length(), 0);
+	cout << getTimeStr() << ": " << message << endl;
 	message.clear();
 	memset(buffer, 0, sizeof buffer);
 }
@@ -100,7 +110,7 @@ void SocketServer::runSocketServer()
 
 	// Listen
 	if (listen(ditrinutedSocket, SOMAXCONN) < 0)
-		cerr << "Can't bind to IP/port";
+		cerr << "Can't listen";
 
 	while (1)
 	{
@@ -110,7 +120,7 @@ void SocketServer::runSocketServer()
 															 &clientLength)) < 0)
 			printf("Accept Failed\n");
 
-		printf("Cliente Connection %s\n", inet_ntoa(clientAddr.sin_addr));
+		cout << "Cliente Connection: " << inet_ntoa(clientAddr.sin_addr) << endl;
 		socketTreatment(clientSocket);
 		close(clientSocket);
 	}
