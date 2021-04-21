@@ -21,4 +21,5 @@ public:
   void runSocketServer();
   void closeSocket();
   bool getResponse();
+  void setResponse(bool newState);
 };

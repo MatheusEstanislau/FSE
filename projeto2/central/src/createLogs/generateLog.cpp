@@ -5,14 +5,15 @@ using namespace std;
 void initWrite()
 {
   FILE *f = fopen("logs/project2.csv", "w");
-  fprintf(f, "Command, Alarm, Date, Hour\n");
+  fprintf(f, "Command, Alarm, AlarmRinging, Date, Hour\n");
   fclose(f);
 }
 
-void writeInCsv(int command, bool alarm)
+void writeInCsv(int command, bool alarm, bool alarmRiging)
 {
   string stringCommand;
   string stringAlarm;
+  string stringAlarmRinging;
   switch (command)
   {
     case 1:
@@ -60,13 +61,20 @@ void writeInCsv(int command, bool alarm)
     case 15:
       stringCommand = "View All States";
       break;
+    case 16:
+      stringCommand = "Play alarm";
+      break;
+    case 17:
+      stringCommand = "Stop ringing alarm";
+      break;   
     default:
       break;
   }
   alarm == true ? stringAlarm = "Alarm activated" : stringAlarm = "Alarm off";
+  alarmRiging == true ? stringAlarmRinging = "Playing" : stringAlarmRinging = "Not Playing";
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
   FILE *f = fopen("logs/project2.csv", "a");
-  fprintf(f, "%s, %s, %d/%d/%d, %.2d:%.2d:%.2d\n",stringCommand.c_str(), stringAlarm.c_str(), tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  fprintf(f, "%s, %s, %s, %d/%d/%d, %.2d:%.2d:%.2d\n",stringCommand.c_str(), stringAlarm.c_str(), stringAlarmRinging.c_str(), tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
   fclose(f);
 }

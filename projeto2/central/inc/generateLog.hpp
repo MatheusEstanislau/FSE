@@ -5,4 +5,4 @@
 using namespace std;
 
 void initWrite();
-void writeInCsv(int command, bool alarm);
+void writeInCsv(int command, bool alarm, bool alarmRinging);

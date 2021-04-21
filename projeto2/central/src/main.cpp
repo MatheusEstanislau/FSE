@@ -23,8 +23,6 @@ Alarm myAlarm;
 
 int flagStop = 0;
 
-string alarmSecret = "Ativar alarme";
-
 void monitoring()
 {
 	server.callServer(16);
@@ -48,7 +46,7 @@ void threadFunction()
 	while (1)
 	{
 		bmeValues.callServer(15);
-		if (flagStop == 0 && !alarmSocket.getResponse())
+		if (flagStop == 0 && !myAlarm.getAlarmisRinging())
 		{
 			cout << bmeValues.getResponse() << endl;
 		}
@@ -109,7 +107,7 @@ void threadFunction2()
 					server.callServer(command);
 					cout << server.getResponse() << endl;
 				}
-				writeInCsv(command, myAlarm.getAlarmState());
+				writeInCsv(command, myAlarm.getAlarmState(), myAlarm.getAlarmisRinging());
 				cout << "Digite 1 para continuar, ou 0 para sair do menu" << endl;
 				cin >> handler;
 			}
@@ -129,6 +127,7 @@ void threadFunction4()
 	{
 		if (alarmSocket.getResponse() && myAlarm.getAlarmState())
 		{
+			alarmSocket.setResponse(false);
 			myAlarm.playAlarm();
 		}
 	}

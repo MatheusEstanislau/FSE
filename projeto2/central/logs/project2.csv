@@ -1,8 +1,6 @@
-Command, Alarm, Date, Hour
-View All States, Alarm off, 2021/4/21, 12:09:58
-Turn on Lamp 1, Alarm off, 2021/4/21, 12:10:06
-View All States, Alarm off, 2021/4/21, 12:10:30
-Turn off lamp 1, Alarm off, 2021/4/21, 12:10:34
-View All States, Alarm off, 2021/4/21, 12:10:51
-Turn on air conditioner 2, Alarm off, 2021/4/21, 12:11:08
-View All States, Alarm off, 2021/4/21, 12:11:14
+Command, Alarm, AlarmRinging, Date, Hour
+Turn on Alarm, Alarm activated, Not Playing, 2021/4/21, 13:14:40
+Play alarm, Alarm activated, Playing, 2021/4/21, 13:14:49
+Turn off Alarm, Alarm off, Playing, 2021/4/21, 13:14:59
+Stop ringing alarm, Alarm off, Not Playing, 2021/4/21, 13:14:59
+View All States, Alarm off, Not Playing, 2021/4/21, 13:15:25
