@@ -7,6 +7,6 @@ class Menu
   int command;
   int option;
   public:
-    void displayMenu();
+    void displayMenu(bool alarmSate);
     int getCommand();
 };

@@ -71,7 +71,7 @@ void threadFunction2()
 		{
 			while (handler != 0)
 			{
-				menu.displayMenu();
+				menu.displayMenu(myAlarm.getAlarmState());
 				command = menu.getCommand();
 
 				if (command == 13)
