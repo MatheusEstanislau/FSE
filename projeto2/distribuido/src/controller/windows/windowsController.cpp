@@ -16,6 +16,6 @@ string WindowsController::readValue(int pin)
     pinMode(pin, INPUT);
     int response = digitalRead(pin);
     response == 0 ? state = "closed" : state = "opened";
-    return "Window " + window + " " + state + "\n";
+    return "Window " + window + ": " + state + "\n";
   }
 }

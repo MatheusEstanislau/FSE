@@ -11,15 +11,18 @@ PresenceSensor presence;
 DoorsController doors;
 WindowsController windows;
 
+string lamp1 = "Lamp 1: Turn off\n", lamp2 = "Lamp 2: Turn off\n", lamp3 = "Lamp 3: Turn off\n", lamp4 = "Lamp 4: Turn off\n", air1 = "Air 01: Turn off\n", air2 = "Air 01: Turn off\n";
+
 int ditrinutedSocket;
 int clientSocket;
 
-string getTimeStr(){
-    time_t now = chrono::system_clock::to_time_t(chrono::system_clock::now());
+string getTimeStr()
+{
+	time_t now = chrono::system_clock::to_time_t(chrono::system_clock::now());
 
-    string s(30, '\0');
-    strftime(&s[0], s.size(), "%Y/%m/%d %H:%M:%S", localtime(&now));
-    return s;
+	string s(30, '\0');
+	strftime(&s[0], s.size(), "%Y/%m/%d %H:%M:%S", localtime(&now));
+	return s;
 }
 
 void socketTreatment(int socketCliente)
@@ -37,42 +40,54 @@ void socketTreatment(int socketCliente)
 	{
 	case 1:
 		message = lamp.powerOn(0);
+		lamp1 = "Lamp 1: Turn on\n";
 		break;
 	case 2:
 		message = lamp.powerOn(1);
+		lamp2 = "Lamp 2: Turn on\n";
 		break;
 	case 3:
 		message = lamp.powerOn(2);
+		lamp3 = "Lamp 3: Turn on\n";
 		break;
 	case 4:
 		message = lamp.powerOn(3);
+		lamp4 = "Lamp 4: Turn on\n";
 		break;
 	case 7:
 		message = lamp.powerOff(0);
+		lamp1 = "Lamp 1: Turn off\n";
 		break;
 	case 8:
 		message = lamp.powerOff(1);
+		lamp2 = "Lamp 2: Turn off\n";
 		break;
 	case 9:
 		message = lamp.powerOff(2);
+		lamp3 = "Lamp 3: Turn off\n";
 		break;
 	case 10:
 		message = lamp.powerOff(3);
+		lamp3 = "Lamp 4: Turn off\n";
 		break;
 	case 5:
 		message = air.powerOn(23);
+		air1 = "Air 01: Turn on\n";
 		break;
 	case 6:
 		message = air.powerOn(24);
+		air2 = "Air 02: Turn on\n";
 		break;
 	case 11:
 		message = air.powerOff(23);
+		air1 = "Air 01: Turn off\n";
 		break;
 	case 12:
 		message = air.powerOff(24);
+		air2 = "Air 02: Turn off\n";
 		break;
 	case 16:
-		message = presence.readValue(6) + presence.readValue(25) + doors.readValue(21) + doors.readValue(26) + windows.readValue(22) + windows.readValue(27) + windows.readValue(28) + windows.readValue(29);
+		message = lamp1 + lamp2 + lamp3 + lamp4 + air1 + air2 + presence.readValue(6) + presence.readValue(25) + doors.readValue(21) + doors.readValue(26) + windows.readValue(22) + windows.readValue(27) + windows.readValue(28) + windows.readValue(29);
 		break;
 	case 15:
 	{
@@ -93,7 +108,6 @@ void socketTreatment(int socketCliente)
 
 void SocketServer::runSocketServer()
 {
-	//bme.initializeBme();
 
 	struct sockaddr_in distributedServerAddr;
 	struct sockaddr_in clientAddr;
