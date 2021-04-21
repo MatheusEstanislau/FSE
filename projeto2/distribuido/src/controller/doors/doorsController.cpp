@@ -1,4 +1,4 @@
-#include "doorsController.hpp"
+#include "../../../inc/doorsController.hpp"
 
 string DoorsController::readValue(int pin) {
   if ( pin != 21 && pin != 26 )

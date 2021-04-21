@@ -1,9 +1,9 @@
 #include <iostream>
 #include <pthread.h>
 #include <csignal>
-#include "app/server/socketServer.hpp"
-#include "controller/gpio/gpioController.hpp"
-#include "app/client/socketClient.hpp"
+#include "../inc/socketServer.hpp"
+#include "../inc/gpioController.hpp"
+#include "../inc/socketClient.hpp"
 
 using namespace std;
 

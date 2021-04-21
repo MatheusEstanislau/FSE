@@ -1,4 +1,4 @@
-#include "lampsController.hpp"
+#include "../../../inc/lampsController.hpp"
 #include <string>
 
 string LampsController::powerOn(int pin)

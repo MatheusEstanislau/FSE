@@ -1,4 +1,4 @@
-#include "gpioController.hpp"
+#include "../../../inc/gpioController.hpp"
 
 void GpioController::initializeGpio()
 {
