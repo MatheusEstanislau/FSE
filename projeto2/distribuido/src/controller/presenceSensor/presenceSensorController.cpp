@@ -1,4 +1,4 @@
-#include "presenceSensorController.hpp"
+#include "../../../inc/presenceSensorController.hpp"
 
 string PresenceSensor::readValue(int pin)
 {

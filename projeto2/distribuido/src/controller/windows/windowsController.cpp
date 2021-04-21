@@ -1,4 +1,4 @@
-#include "windowController.hpp"
+#include "../../../inc/windowController.hpp"
 
 string WindowsController::readValue(int pin)
 {
