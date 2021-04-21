@@ -15,11 +15,10 @@ using namespace std;
 
 class SocketServer 
 {
-  void socketTreatment(int clientSocket);
-  string response;
-  bool alarmState = false;
+  void socketTreatment();
+  bool response = false;
 public:
   void runSocketServer();
   void closeSocket();
-  string getResponse();
+  bool getResponse();
 };

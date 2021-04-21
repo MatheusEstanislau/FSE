@@ -48,7 +48,7 @@ void threadFunction()
 	while (1)
 	{
 		bmeValues.callServer(15);
-		if (flagStop == 0 && !myAlarm.getAlarmState() && "Ativar alarme" == alarmSecret)
+		if (flagStop == 0 && !alarmSocket.getResponse())
 		{
 			cout << bmeValues.getResponse() << endl;
 		}
@@ -62,10 +62,6 @@ void threadFunction2()
 	while (1)
 	{
 		int handler = 1;
-		if (myAlarm.getAlarmState() && "Ativar alarme" == alarmSecret)
-		{
-			myAlarm.playAlarm();
-		}
 		if (flagStop == 0)
 		{
 			cout << "Insert 1 to open the menu" << endl;
@@ -127,6 +123,17 @@ void threadFunction3()
 	alarmSocket.runSocketServer();
 }
 
+void threadFunction4()
+{
+	while (1)
+	{
+		if (alarmSocket.getResponse() && myAlarm.getAlarmState())
+		{
+			myAlarm.playAlarm();
+		}
+	}
+}
+
 int main()
 {
 	signal(SIGINT, poweroff);
@@ -134,8 +141,10 @@ int main()
 	thread getBme(threadFunction);
 	thread menuHandler(threadFunction2);
 	thread alarmScoket(threadFunction3);
+	thread alarmMonitoring(threadFunction4);
 	getBme.join();
 	menuHandler.join();
 	alarmScoket.join();
+	alarmMonitoring.join();
 	return 0;
 }

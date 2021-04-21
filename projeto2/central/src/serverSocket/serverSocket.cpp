@@ -5,17 +5,17 @@ using namespace std;
 int centralSocket;
 int clientSocket;
 
-void SocketServer::socketTreatment(int clientSocket)
+void SocketServer::socketTreatment()
 {
-	string response = "OK";
+	string responseClient = "OK";
 	vector<char> buf(5000);
 	int bytes = recv(clientSocket, buf.data(), buf.size(), 0);
 	string s(buf.begin(), buf.end());
-	cout << s << endl;
-	response = "Ativar alarme";
-	send(clientSocket, response.c_str(), response.length(), 0);
+	response = true;
+	cout << "entrei" << endl;
+	send(clientSocket, responseClient.c_str(), responseClient.length(), 0);
 	buf.clear();
-	response.clear();
+	responseClient.clear();
 }
 
 void SocketServer::runSocketServer()
@@ -34,22 +34,15 @@ void SocketServer::runSocketServer()
 	if (bind(centralSocket, (struct sockaddr *)&centralServerAddr, sizeof(centralServerAddr)) < 0)
 		cerr << "Can't bind to IP/port";
 
-	// Listen
 	if (listen(centralSocket, SOMAXCONN) < 0)
-		cerr << "Can't bind to IP/port";
+		cerr << "Can't Listen";
 
-	// you are using C++ not C
-	while (1)
-	{
-		clientLength = sizeof(clientAddr);
-		if ((clientSocket = accept(centralSocket,
-															 (struct sockaddr *)&clientAddr,
-															 &clientLength)) < 0)
-			printf("Accept Failed\n");
-		socketTreatment(clientSocket);
-		printf("Cliente Connection %s\n", inet_ntoa(clientAddr.sin_addr));
-		close(clientSocket);
-	}
+	clientLength = sizeof(clientAddr);
+	if ((clientSocket = accept(centralSocket, (struct sockaddr *)&clientAddr, &clientLength)) < 0)
+		cerr << "Accept Failed" << endl;
+	cout << "Client Connection: "<< inet_ntoa(clientAddr.sin_addr) << endl;
+	socketTreatment();
+	close(clientSocket);
 	close(centralSocket);
 }
 
@@ -59,8 +52,7 @@ void SocketServer::closeSocket()
 	close(centralSocket);
 }
 
-
-string SocketServer::getResponse()
+bool SocketServer::getResponse()
 {
 	return response;
 }
