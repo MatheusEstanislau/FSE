@@ -15,17 +15,16 @@ SocketClient alarmSocket;
 void poweroff(int exitAlarm)
 {
   cout << endl
-       << "...Desligando Sistema" << endl;
+       << "...Shutting down the system" << endl;
   alarmSocket.closeSocket();
   serverSocket.closeSocket();
   cout << endl
-       << "Sistema desligado" << endl;
+       << "System off" << endl;
   exit(0);
 }
 
 void sendAlarm()
 {
-  cout << "alarme" << endl;
   alarmSocket.callServer();
   cout << alarmSocket.getResponse() << endl;
   alarmSocket.closeSocket();

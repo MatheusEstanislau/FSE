@@ -37,8 +37,9 @@ void SocketClient::callServer()
 	vector<char> buf(5000);
 	int bytes = recv(clienteSocket, buf.data(), buf.size(), 0);
 	string s(buf.begin(), buf.end());
-	cout << mensagem << endl;
+	response = s;
 	mensagem.clear();
+	close(clienteSocket);
 }
 
 void SocketClient::closeSocket()
